@@ -1,6 +1,6 @@
 import requests, zipfile, io
 
-with open("obf_hello_linux", "rb") as f:
+with open("../obf_hello_linux", "rb") as f:
     data = f.read()
 
 zip_buffer = io.BytesIO()
