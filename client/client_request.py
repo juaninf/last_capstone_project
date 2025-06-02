@@ -7,9 +7,11 @@ zip_buffer = io.BytesIO()
 with zipfile.ZipFile(zip_buffer, mode="w") as zf:
     zf.writestr("obf_hello_linux_zip", data)
 
-zip_buffer.seek(0)  # move to start BEFORE sending
+zip_buffer.seek(0)
+
+#parallel loop
 response = requests.post(
-    "http://localhost:8000/process",
+    "http://100.27.243.37:8000/process",
     data=zip_buffer.read(),
     headers={"Content-Type": "application/zip"}
 )

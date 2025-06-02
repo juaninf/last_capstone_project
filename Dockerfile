@@ -2,17 +2,26 @@ FROM ubuntu:20.04
 
 WORKDIR /home
 
-# Base setup
-RUN apt update && apt upgrade -y && apt update && \
-    DEBIAN_FRONTEND=noninteractive apt install -y \
+RUN sed -i 's|http://archive.ubuntu.com|http://azure.archive.ubuntu.com|g' /etc/apt/sources.list && \
+    apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+    rsync \
+    libpopt0 \
     python3 python3-pip \
     libboost-python-dev libboost-numpy-dev \
-    libcpprest-dev wget curl git
+    libcpprest-dev wget curl git && \
+    apt-get upgrade -y && \
+    rm -rf /var/lib/apt/lists/*
+
 
 # Python dependencies
-RUN pip3 install --upgrade pip && \
-    pip3 install numpy pyelftools pefile \
-    "ray[serve]>=2.9.0" transformers torch
+RUN pip3 install --upgrade pip
+RUN pip3 install numpy
+RUN pip3 install pyelftools
+RUN pip3 install pefile
+RUN pip3 install "ray[serve]>=2.9.0"
+RUN pip3 install transformers
+RUN pip3 install torch
 
 # ONNX Runtime
 RUN wget -q https://github.com/microsoft/onnxruntime/releases/download/v1.10.0/onnxruntime-linux-x64-1.10.0.tgz && \
